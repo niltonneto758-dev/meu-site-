@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site de Ajuda - Programação</title>
+    <style>
+        /* Estilos Gerais e Fundo Hacker */
+        :root {
+            --border-color: #0f0;
+            --border-glow: #0f0;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        #matrix-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Layout Principal */
+        .main-container {
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 950px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 0 20px var(--border-glow);
+        }
+
+        /* --- SEÇÃO DE CONTEÚDO (TUTORIAIS) --- */
+        .content-section {
+            display: none; /* Escondido por padrão */
+            padding: 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-section h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px var(--border-glow);
+        }
+
+        .content-section h2 {
+            font-size: 1.8em;
+            border-bottom: 2px solid;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        /* Cores específicas para cada seção */
+        #html-content h1, #html-content h2 { color: #ff6600; }
+        #css-content h1, #css-content h2 { color: #007bff; }
+        #js-content h1, #js-content h2 { color: #ffcc00; }
+
+
+        .content-section .exemplo {
+            background: #111;
+            padding: 15px;
+            border-left: 4px solid var(--border-color);
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .content-section p, .content-section li {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+        .content-section ul {
+            list-style-type: square;
+            padding-left: 25px;
+        }
+        .content-section b, .content-section code {
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+        }
+
+        /* --- TELA INICIAL (APRESENTAÇÃO) --- */
+        #home-section {
+            display: block; /* Visível por padrão */
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .profile-picture-container {
+            width: 200px;
+            height: 200px;
+            min-width: 200px;
+            border-radius: 50%;
+            border: 5px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-picture-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #333;
+        }
+
+        .intro-text p {
+            font-size: 24px;
+            line-height: 1.6;
+            text-shadow: 0 0 8px var(--border-glow);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            padding-top: 20px;
+            flex-wrap: wrap;
+        }
+        /* --- ESTILOS DOS BOTÕES (HTML, CSS, JS) --- */
+        .button {
+          --white: #ffe7ff;
+          --purple-100: #f4b1fd; --purple-200: #d190ff; --purple-300: #c389f2;
+          --purple-400: #8e26e2; --purple-500: #5e2b83; --radius: 18px;
+          border-radius: var(--radius); outline: none; cursor: pointer;
+          font-size: 23px; font-family: Arial, sans-serif; background: transparent;
+          letter-spacing: -1px; border: 0; position: relative;
+          width: 220px; height: 80px; transform: rotate(353deg) skewX(4deg);
+          margin: 10px;
+        }
+        .button .bg { position: absolute; inset: 0; border-radius: inherit; filter: blur(1px); }
+        .button .bg::before, .button .bg::after { content: ""; position: absolute; inset: 0; border-radius: calc(var(--radius) * 1.1); background: var(--purple-500); }
+        .button .bg::before { filter: blur(5px); transition: all 0.3s ease; box-shadow: -7px 6px 0 0 rgb(115 75 155 / 40%), -14px 12px 0 0 rgb(115 75 155 / 30%), -21px 18px 4px 0 rgb(115 75 155 / 25%), -28px 24px 8px 0 rgb(115 75 155 / 15%), -35px 30px 12px 0 rgb(115 75 155 / 12%), -42px 36px 16px 0 rgb(115 75 155 / 8%), -56px 42px 20px 0 rgb(115 75 155 / 5%); }
+        .button .wrap { border-radius: inherit; overflow: hidden; height: 100%; transform: translate(6px, -6px); padding: 3px; background: linear-gradient( to bottom, var(--purple-100) 0%, var(--purple-400) 100% ); position: relative; transition: all 0.3s ease; }
+        .button .content { pointer-events: none; display: flex; align-items: center; justify-content: center; z-index: 1; position: relative; height: 100%; gap: 16px; border-radius: calc(var(--radius) * 0.85); font-weight: 600; transition: all 0.3s ease; background: linear-gradient( to bottom, var(--purple-300) 0%, var(--purple-400) 100% ); box-shadow: inset -2px 12px 11px -5px var(--purple-200), inset 1px -3px 11px 0px rgb(0 0 0 / 35%); }
+        .button .char { transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+        .button .char span { display: block; color: var(--white); text-shadow: -1px 1px 2px var(--purple-500); }
+        .button:hover .wrap { transform: translate(8px, -8px); }
+        .button:active .wrap { transform: translate(3px, -3px); }
+
+        /* Botão Voltar e Botão de Teste JS */
+        .btn-back, .btn-js-test {
+            background: var(--border-color);
+            color: black;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 1.1em;
+            display: inline-block;
+            text-shadow: none;
+        }
+        .btn-back:hover, .btn-js-test:hover {
+            background: #fff;
+            box-shadow: 0 0 15px #fff;
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-background"></canvas>
+
+    <div class="main-container">
+
+        <div id="home-section">
+            <header>
+                <div class="profile-picture-container">
+                    <img src="2a25de24b45816bd07db73899e3f6d67 (1).jpg" alt="Foto de Perfil do Nilton">
+                </div>
+                <div class="intro-text">
+                    <p>
+                        Eu me chamo Nilton, e hoje eu estou criando esse site para ajudar as pessoas com
+                        dificuldade em programar. Aqui vai ter um site básico de Html, Css, e javascript. Espero que
+                        gostem do site e que eu consiga ajudar o máximo de pessoas possível.
+                    </p>
+                </div>
+            </header>
+
+            <footer>
+                <button class="button" onclick="showSection('html-content')">
+                    <div class="bg"></div>
+                    <div class="wrap"><div class="content"><span class="char"><span>HTML</span></span></div></div>
+                </button>
+                <button class="button" onclick="showSection('css-content')">
+                    <div class="bg"></div>
+                    <div class="wrap"><div class="content"><span class="char"><span>CSS</span></span></div></div>
+                </button>
+                <button class="button" onclick="showSection('js-content')">
+                    <div class="bg"></div>
+                    <div class="wrap"><div class="content"><span class="char"><span>JS</span></span></div></div>
+                </button>
+            </footer>
+        </div>
+
+        <div id="html-content" class="content-section">
+            <button class="btn-back" onclick="showSection('home-section')">&larr; Voltar</button>
+            <header>
+                <h1>Aprendendo HTML do Zero</h1>
+            </header>
+            <section>
+                <h2>1. O que é HTML?</h2>
+                <p>HTML significa <code>HyperText Markup Language</code>. Ele é usado para criar a <b>estrutura</b> de páginas da web, como textos, imagens, links e listas.</p>
+                <h2>2. Estrutura básica de uma página HTML</h2>
+                <div class="exemplo">&lt;!DOCTYPE html&gt;<br>&lt;html&gt;<br>&nbsp;&nbsp;&lt;head&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Título da Página&lt;/title&gt;<br>&nbsp;&nbsp;&lt;/head&gt;<br>&nbsp;&nbsp;&lt;body&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;Aqui vai o conteúdo da página!<br>&nbsp;&nbsp;&lt;/body&gt;<br>&lt;/html&gt;</div>
+                <h2>3. Principais tags</h2>
+                <ul>
+                    <li><b>&lt;h1&gt; até &lt;h6&gt;</b>: Títulos (h1 é o maior, h6 o menor)</li>
+                    <li><b>&lt;p&gt;</b>: Parágrafos de texto</li>
+                    <li><b>&lt;a&gt;</b>: Links</li>
+                    <li><b>&lt;img&gt;</b>: Imagens</li>
+                    <li><b>&lt;ul&gt; &lt;li&gt;</b>: Listas</li>
+                </ul>
+                <h2>4. Exemplos práticos</h2>
+                <h3>Título e parágrafo:</h3>
+                <div class="exemplo">&lt;h1&gt;Bem-vindo ao meu site&lt;/h1&gt;<br>&lt;p&gt;Esse é um parágrafo de exemplo.&lt;/p&gt;</div>
+                <h3>Link:</h3>
+                <div class="exemplo">&lt;a href="https://www.google.com"&gt;Ir para o Google&lt;/a&gt;</div>
+                <h3>Imagem:</h3>
+                <div class="exemplo">&lt;img src="https://via.placeholder.com/150" alt="Exemplo de imagem"&gt;</div>
+                <h2>5. Conclusão</h2>
+                <p>O HTML é a base de todo site. Com ele você cria a <b>estrutura</b>. Depois, pode usar <b>CSS</b> para estilos e <b>JavaScript</b> para interatividade.</p>
+            </section>
+        </div>
+
+        <div id="css-content" class="content-section">
+            <button class="btn-back" onclick="showSection('home-section')">&larr; Voltar</button>
+            <header>
+                <h1>Aprendendo CSS do Zero</h1>
+            </header>
+            <section>
+                <h2>1. O que é CSS?</h2>
+                <p>CSS significa <code>Cascading Style Sheets</code>. Ele é usado para dar <b>estilo</b> ao HTML, como cores, tamanhos, fontes e layouts.</p>
+                <h2>2. Como usar CSS</h2>
+                <ul>
+                    <li><b>Inline:</b> direto dentro da tag HTML.</li>
+                    <li><b>Interno:</b> dentro da tag <code>&lt;style&gt;</code> no HTML.</li>
+                    <li><b>Externo:</b> em um arquivo separado <code>.css</code>.</li>
+                </ul>
+                <h2>3. Exemplos</h2>
+                <h3>Exemplo Inline:</h3>
+                <div class="exemplo">&lt;p style="color: blue;"&gt;Texto azul&lt;/p&gt;</div>
+                <h3>Exemplo Interno:</h3>
+                <div class="exemplo">&lt;style&gt;<br>&nbsp;&nbsp;p { color: red; }<br>&lt;/style&gt;<br>&lt;p&gt;Texto vermelho&lt;/p&gt;</div>
+                <h2>4. Propriedades mais usadas</h2>
+                <ul>
+                    <li><b>color:</b> cor do texto</li>
+                    <li><b>background-color:</b> cor de fundo</li>
+                    <li><b>font-size:</b> tamanho da fonte</li>
+                    <li><b>margin:</b> espaço externo</li>
+                    <li><b>padding:</b> espaço interno</li>
+                    <li><b>border:</b> borda do elemento</li>
+                </ul>
+                <h2>5. Conclusão</h2>
+                <p>O CSS transforma um site simples em algo visualmente agradável. Ele trabalha junto com o HTML para criar páginas profissionais.</p>
+            </section>
+        </div>
+
+        <div id="js-content" class="content-section">
+            <button class="btn-back" onclick="showSection('home-section')">&larr; Voltar</button>
+            <header>
+                <h1>Aprendendo JavaScript do Zero</h1>
+            </header>
+            <section>
+                <h2>1. O que é JavaScript?</h2>
+                <p>JavaScript é a linguagem de programação usada para dar <b>funcionalidade</b> e <b>interatividade</b> aos sites. Com ele você pode criar botões que reagem a cliques, animações, formulários inteligentes e muito mais.</p>
+                <h2>2. Como usar JavaScript</h2>
+                <ul>
+                    <li><b>Interno:</b> dentro da tag <code>&lt;script&gt;</code> no HTML.</li>
+                    <li><b>Externo:</b> em um arquivo separado <code>.js</code>.</li>
+                </ul>
+                <h2>3. Exemplo básico</h2>
+                <p>Um alerta ao abrir a página:</p>
+                <div class="exemplo">&lt;script&gt;<br>&nbsp;&nbsp;alert("Bem-vindo ao meu site!");<br>&lt;/script&gt;</div>
+                <h2>4. Manipulando conteúdo</h2>
+                <p>HTML:</p>
+                <div class="exemplo">&lt;p id="texto"&gt;Texto original&lt;/p&gt;<br>&lt;button onclick="mudarTexto()"&gt;Clique aqui&lt;/button&gt;</div>
+                <p>JavaScript:</p>
+                <div class="exemplo">function mudarTexto() {<br>&nbsp;&nbsp;document.getElementById("texto").innerText = "O texto mudou!";<br>}</div>
+                <h2>5. Teste interativo</h2>
+                <p id="demo">Clique no botão abaixo:</p>
+                <button class="btn-js-test" onclick="document.getElementById('demo').innerText = 'Você clicou no botão!'">Clique aqui para testar</button>
+                <h2>6. Conclusão</h2>
+                <p>O JavaScript deixa o site <b>vivo</b>. Ele funciona junto com o HTML (estrutura) e o CSS (estilo). Os três juntos são a base da web moderna.</p>
+            </section>
+        </div>
+
+    </div>
+
+    <script>
+        // === SCRIPT PARA NAVEGAÇÃO ENTRE SEÇÕES ===
+        function showSection(sectionId) {
+            // Esconde todas as seções
+            document.getElementById('home-section').style.display = 'none';
+            document.getElementById('html-content').style.display = 'none';
+            document.getElementById('css-content').style.display = 'none';
+            document.getElementById('js-content').style.display = 'none';
+
+            // Mostra apenas a seção desejada
+            document.getElementById(sectionId).style.display = 'block';
+            window.scrollTo(0, 0); // Rola a página para o topo
+        }
+
+
+        // === SCRIPT PARA O FUNDO MATRIX ===
+        const canvas = document.getElementById('matrix-background');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789';
+        const characters = katakana.split('');
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters[Math.floor(Math.random() * characters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const newColumns = canvas.width / fontSize;
+            drops.length = 0;
+            for (let x = 0; x < newColumns; x++) {
+                drops[x] = 1;
+            }
+        });
+    </script>
+</body>
+</html>
